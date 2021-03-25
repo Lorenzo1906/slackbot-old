@@ -1,5 +1,6 @@
 package com.example.slackbot.bot;
 
+import com.example.slackbot.command.CommandParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ramswaroop.jbot.core.slack.models.Attachment;
@@ -25,7 +26,7 @@ public class SlackSlashCommand {
 
 
 
-    @RequestMapping(value = "/slash-command", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @RequestMapping(value = "/api/slack-message", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public RichMessage onReceiveSlashCommand(@RequestParam("token") String token,
                                              @RequestParam("team_id") String teamId,
                                              @RequestParam("team_domain") String teamDomain,
@@ -36,6 +37,10 @@ public class SlackSlashCommand {
                                              @RequestParam("command") String command,
                                              @RequestParam("text") String text,
                                              @RequestParam("response_url") String responseUrl) {
+
+
+        CommandParser parser = new CommandParser();
+        parser.doMain(text.split(" "));
 
         RichMessage richMessage = new RichMessage("The is Slash Commander!");
         richMessage.setResponseType("in_channel");
